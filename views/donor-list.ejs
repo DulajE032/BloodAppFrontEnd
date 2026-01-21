@@ -1,0 +1,125 @@
+<%- include('partials/header') %>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-users"></i> All Donors</h1>
+        </div>
+
+        <% if (locals.error) { %>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <%= error %>
+            </div>
+            <% } %>
+
+                <!-- Filter Section -->
+                <div class="filter-section">
+                    <form action="/donors" method="GET" class="filter-form">
+                        <div class="filter-group">
+                            <input type="text" name="search" placeholder="Search by name..."
+                                value="<%= filters.search || '' %>" class="input-field">
+                        </div>
+
+                        <div class="filter-group">
+                            <select name="bloodGroup" class="select-field">
+                                <option value="">All Blood Groups</option>
+                                <option value="A+" <%=filters.bloodGroup==='A+' ? 'selected' : '' %>>A+</option>
+                                <option value="B+" <%=filters.bloodGroup==='B+' ? 'selected' : '' %>>B+</option>
+                                <option value="AB+" <%=filters.bloodGroup==='AB+' ? 'selected' : '' %>>AB+</option>
+                                <option value="O+" <%=filters. bloodGroup==='O+' ? 'selected' : '' %>>O+</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <select name="eligible" class="select-field">
+                                <option value="">All Eligibility</option>
+                                <option value="true" <%=filters.eligible==='true' ? 'selected' : '' %>>Eligible</option>
+                                <option value="false" <%=filters. eligible==='false' ? 'selected' : '' %>>Not Eligible
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <input type="text" name="city" placeholder="City..." value="<%= filters.city || '' %>"
+                                class="input-field">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                        <a href="/donors" class="btn btn-secondary">
+                            <i class="fas fa-redo"></i> Reset
+                        </a>
+                    </form>
+                </div>
+
+                <!-- Donors Grid -->
+                <div class="donors-grid">
+                    <% if (donors && donors.length> 0) { %>
+                        <% donors.forEach(donor=> { %>
+                            <div class="donor-card <%= donor.is_eligible ? 'eligible' :  'not-eligible' %>">
+                                <div class="donor-header">
+                                    <div class="blood-badge <%= donor.bloodGroup %>">
+                                        <%= donor.bloodGroup %>
+                                    </div>
+                                    <div class="eligibility-badge">
+                                        <% if (donor.is_eligible) { %>
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-check"></i> Eligible
+                                            </span>
+                                            <% } else { %>
+                                                <span class="badge badge-danger">
+                                                    <i class="fas fa-times"></i> Not Eligible
+                                                </span>
+                                                <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="donor-body">
+                                    <h3><i class="fas fa-user"></i>
+                                        <%= donor.name %>
+                                    </h3>
+
+                                    <div class="donor-info">
+                                        <p><i class="fas fa-venus-mars"></i> <strong>Gender:</strong>
+                                            <%= donor.gender %>
+                                        </p>
+                                        <p><i class="fas fa-birthday-cake"></i> <strong>Age:</strong>
+                                            <%= donor.getAge || 'N/A' %> years
+                                        </p>
+                                        <p><i class="fas fa-phone"></i> <strong>Phone: </strong>
+                                            <%= donor.phone %>
+                                        </p>
+                                        <% if (donor.city) { %>
+                                            <p><i class="fas fa-map-marker-alt"></i> <strong>City:</strong>
+                                                <%= donor.city %>
+                                            </p>
+                                            <% } %>
+                                                <% if (donor.last_don) { %>
+                                                    <p><i class="fas fa-calendar"></i> <strong>Last Donation:</strong>
+                                                        <%= new Date(donor.last_don).toLocaleDateString() %>
+                                                    </p>
+                                                    <% } else { %>
+                                                        <p><i class="fas fa-calendar"></i> <strong>Last
+                                                                Donation:</strong> Never donated</p>
+                                                        <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="donor-footer">
+                                    <a href="/donors/<%= donor.id %>" class="btn btn-small btn-primary">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </a>
+                                </div>
+                            </div>
+                            <% }); %>
+                                <% } else { %>
+                                    <div class="no-results">
+                                        <i class="fas fa-search"></i>
+                                        <p>No donors found matching your criteria.</p>
+                                    </div>
+                                    <% } %>
+                </div>
+    </div>
+
+    <%- include('partials/footer') %>

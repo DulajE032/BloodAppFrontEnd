@@ -1,0 +1,49 @@
+<%- include('partials/header') %>
+
+    <div class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1><i class="fas fa-hand-holding-heart"></i> Blood Donor Management</h1>
+                <p class="hero-subtitle">View and manage blood donor information efficiently</p>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Total Donors</h3>
+                        <p id="total-donors">Loading...</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Eligible Donors</h3>
+                        <p id="eligible-donors">Loading...</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-tint"></i>
+                        <h3>Blood Groups</h3>
+                        <p>8 Types</p>
+                    </div>
+                </div>
+                <a href="/donors" class="btn btn-primary btn-large">
+                    <i class="fas fa-list"></i> View All Donors
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch stats on page load
+        fetch('/api/donors')
+            .then(response => response.json())
+            .then(data => {
+                const total = Array.isArray(data) ? data.length : 0;
+                const eligible = Array.isArray(data) ? data.filter(d => d.is_eligible).length : 0;
+
+                document.getElementById('total-donors').textContent = total;
+                document.getElementById('eligible-donors').textContent = eligible;
+            })
+            .catch(error => {
+                document.getElementById('total-donors').textContent = 'N/A';
+                document.getElementById('eligible-donors').textContent = 'N/A';
+            });
+    </script>
+
+    <%- include('partials/footer') %>

@@ -1,0 +1,170 @@
+<%- include('partials/header') %>
+
+    <div class="container">
+        <% if (locals.error) { %>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <%= error %>
+            </div>
+            <a href="/donors" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Donors
+            </a>
+            <% } else if (donor) { %>
+                <div class="detail-header">
+                    <a href="/donors" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                    <h1><i class="fas fa-user-circle"></i> Donor Details</h1>
+                </div>
+
+                <div class="detail-container">
+                    <div class="detail-card">
+                        <div class="detail-hero <%= donor.is_eligible ? 'eligible-bg' : 'not-eligible-bg' %>">
+                            <div class="blood-type-large">
+                                <%= donor.bloodGroup %>
+                            </div>
+                            <h2>
+                                <%= donor.name %>
+                            </h2>
+                            <div class="status-badge-large">
+                                <% if (donor.is_eligible) { %>
+                                    <i class="fas fa-check-circle"></i> Eligible to Donate
+                                    <% } else { %>
+                                        <i class="fas fa-clock"></i> Not Eligible Yet
+                                        <% } %>
+                            </div>
+                        </div>
+
+                        <div class="detail-body">
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <i class="fas fa-hashtag info-icon"></i>
+                                    <div>
+                                        <label>Donor ID</label>
+                                        <p>
+                                            <%= donor.id %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="info-item">
+                                    <i class="fas fa-venus-mars info-icon"></i>
+                                    <div>
+                                        <label>Gender</label>
+                                        <p>
+                                            <%= donor.gender %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="info-item">
+                                    <i class="fas fa-birthday-cake info-icon"></i>
+                                    <div>
+                                        <label>Age</label>
+                                        <p>
+                                            <%= donor.getAge || 'N/A' %> years
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="info-item">
+                                    <i class="fas fa-calendar info-icon"></i>
+                                    <div>
+                                        <label>Date of Birth</label>
+                                        <p>
+                                            <%= new Date(donor.dob).toLocaleDateString() %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="info-item">
+                                    <i class="fas fa-phone info-icon"></i>
+                                    <div>
+                                        <label>Phone Number</label>
+                                        <p><a href="tel: <%= donor.phone %>">
+                                                <%= donor.phone %>
+                                            </a></p>
+                                    </div>
+                                </div>
+
+                                <div class="info-item">
+                                    <i class="fas fa-tint info-icon"></i>
+                                    <div>
+                                        <label>Blood Group</label>
+                                        <p class="blood-group-text">
+                                            <%= donor.bloodGroup %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <% if (donor.address) { %>
+                                    <div class="info-item full-width">
+                                        <i class="fas fa-home info-icon"></i>
+                                        <div>
+                                            <label>Address</label>
+                                            <p>
+                                                <%= donor.address %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <% } %>
+
+                                        <% if (donor. city) { %>
+                                            <div class="info-item">
+                                                <i class="fas fa-map-marker-alt info-icon"></i>
+                                                <div>
+                                                    <label>City</label>
+                                                    <p>
+                                                        <%= donor.city %>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <% } %>
+
+                                                <% if (donor.last_don) { %>
+                                                    <div class="info-item">
+                                                        <i class="fas fa-calendar-check info-icon"></i>
+                                                        <div>
+                                                            <label>Last Donation</label>
+                                                            <p>
+                                                                <%= new Date(donor.last_don).toLocaleDateString() %>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <% } else { %>
+                                                        <div class="info-item">
+                                                            <i class="fas fa-calendar-times info-icon"></i>
+                                                            <div>
+                                                                <label>Last Donation</label>
+                                                                <p class="text-muted">No previous donation</p>
+                                                            </div>
+                                                        </div>
+                                                        <% } %>
+
+                                                            <% if (donor.latitude && donor.longitude) { %>
+                                                                <div class="info-item full-width">
+                                                                    <i class="fas fa-map-pin info-icon"></i>
+                                                                    <div>
+                                                                        <label>Coordinates</label>
+                                                                        <p>
+                                                                            Lat: <%= donor.latitude %>, Long: <%=
+                                                                                    donor.longitude %>
+                                                                                    <a href="https://www.google.com/maps? q=<%= donor.latitude %>,<%= donor.longitude %>"
+                                                                                        target="_blank"
+                                                                                        class="map-link">
+                                                                                        <i
+                                                                                            class="fas fa-external-link-alt"></i>
+                                                                                        View on Map
+                                                                                    </a>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+    </div>
+
+    <%- include('partials/footer') %>
